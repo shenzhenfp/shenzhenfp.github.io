@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
-  <title>我的博客</title>
+  <title>深圳开发票,深圳发票-可在网上验证查询</title>
   
-  <subtitle>又一个GoodHexo小站</subtitle>
+  <subtitle>又一个小站</subtitle>
   <link href="/atom.xml" rel="self"/>
   
-  <link href="zhusufap.com/"/>
+  <link href="bestwesternpremierbeijing.cn/"/>
   <updated>2017-12-11T02:44:55.000Z</updated>
-  <id>zhusufap.com/</id>
+  <id>bestwesternpremierbeijing.cn/</id>
   
   <author>
-    <name>aaa</name>
+    <name>paiming</name>
     
   </author>
   
@@ -18,8 +18,8 @@
   
   <entry>
     <title>这个是文章标题</title>
-    <link href="zhusufap.com/just-test.html"/>
-    <id>zhusufap.com/just-test.html</id>
+    <link href="bestwesternpremierbeijing.cn/just-test.html"/>
+    <id>bestwesternpremierbeijing.cn/just-test.html</id>
     <published>2017-12-11T02:44:55.000Z</published>
     <updated>2017-12-11T02:44:55.000Z</updated>
     
@@ -41,8 +41,8 @@
   
   <entry>
     <title>Hexo，从此开始...</title>
-    <link href="zhusufap.com/hello-world.html"/>
-    <id>zhusufap.com/hello-world.html</id>
+    <link href="bestwesternpremierbeijing.cn/hello-world.html"/>
+    <id>bestwesternpremierbeijing.cn/hello-world.html</id>
     <published>2017-09-05T07:15:40.000Z</published>
     <updated>2017-10-26T07:15:40.000Z</updated>
     
@@ -55,14 +55,14 @@
     
     </summary>
     
-      <category term="做网站" scheme="zhusufap.com/categories/%E5%81%9A%E7%BD%91%E7%AB%99/"/>
+      <category term="做网站" scheme="bestwesternpremierbeijing.cn/categories/%E5%81%9A%E7%BD%91%E7%AB%99/"/>
     
     
-      <category term="Hexo" scheme="zhusufap.com/tags/Hexo/"/>
+      <category term="Hexo" scheme="bestwesternpremierbeijing.cn/tags/Hexo/"/>
     
-      <category term="GoodHexo" scheme="zhusufap.com/tags/GoodHexo/"/>
+      <category term="GoodHexo" scheme="bestwesternpremierbeijing.cn/tags/GoodHexo/"/>
     
-      <category term="博客建站" scheme="zhusufap.com/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99/"/>
+      <category term="博客建站" scheme="bestwesternpremierbeijing.cn/tags/%E5%8D%9A%E5%AE%A2%E5%BB%BA%E7%AB%99/"/>
     
   </entry>
   
