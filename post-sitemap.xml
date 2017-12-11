@@ -7,6 +7,14 @@
     </url>
 
     <url>
+        <loc>zhusufap.xyz/just-test.html</loc>
+        <lastmod>2017-12-11T02:44:55.000Z</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.6</priority>
+
+    </url>
+
+    <url>
         <loc>zhusufap.xyz/hello-world.html</loc>
         <lastmod>2017-10-26T07:15:40.000Z</lastmod>
         <changefreq>weekly</changefreq>

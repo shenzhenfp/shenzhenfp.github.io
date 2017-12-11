@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="zhusufap.xyz/"/>
-  <updated>2017-10-26T07:15:40.000Z</updated>
+  <updated>2017-12-11T02:44:55.000Z</updated>
   <id>zhusufap.xyz/</id>
   
   <author>
@@ -15,6 +15,29 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>这个是文章标题</title>
+    <link href="zhusufap.xyz/just-test.html"/>
+    <id>zhusufap.xyz/just-test.html</id>
+    <published>2017-12-11T02:44:55.000Z</published>
+    <updated>2017-12-11T02:44:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>这里开始写文字内容</p><p>离离原上草，一岁一枯荣。<br>野火烧不尽，春风吹又生。<br>远芳侵古道，晴翠接荒城。<br>又送王孙去，萋萋满别情。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;这里开始写文字内容&lt;/p&gt;
+&lt;p&gt;离离原上草，一岁一枯荣。&lt;br&gt;野火烧不尽，春风吹又生。&lt;br&gt;远芳侵古道，晴翠接荒城。&lt;br&gt;又送王孙去，萋萋满别情。&lt;/p&gt;
+
+      
+    
+    </summary>
+    
+    
+  </entry>
   
   <entry>
     <title>Hexo，从此开始...</title>
