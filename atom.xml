@@ -6,7 +6,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="bestwesternpremierbeijing.cn/"/>
-  <updated>2017-12-12T08:45:24.000Z</updated>
+  <updated>2018-01-16T07:24:34.000Z</updated>
   <id>bestwesternpremierbeijing.cn/</id>
   
   <author>
@@ -15,6 +15,56 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>为什么要使用Cookie呢？</title>
+    <link href="bestwesternpremierbeijing.cn/python.html"/>
+    <id>bestwesternpremierbeijing.cn/python.html</id>
+    <published>2018-01-16T07:24:34.000Z</published>
+    <updated>2018-01-16T07:24:34.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>为什么要使用Cookie呢？<br>Cookie，指某些网站为了辨别用户身份、进行session跟踪而储存在用户本地终端上的数据（通常经过加密）<br>比如说有些网站需要登录后才能访问某个页面，在登录之前，你想抓取某个页面内容是不允许的。那么我们可以利用Urllib2库保存我们登录的Cookie，然后再抓取其他页面就达到目的了。<br>在此之前呢，我们必须先介绍一个opener的概念。</p><p>1.Opener<br>当你获取一个URL你使用一个opener(一个urllib2.OpenerDirector的实例)。在前面，我们都是使用的默认的opener，也就是urlopen。它是一个特殊的opener，可以理解成opener的一个特殊实例，传入的参数仅仅是url，data，timeout。</p><p>如果我们需要用到Cookie，只用这个opener是不能达到目的的，所以我们需要创建更一般的opener来实现对Cookie的设置。</p><p>2.Cookielib<br>cookielib模块的主要作用是提供可存储cookie的对象，以便于与urllib2模块配合使用来访问Internet资源。Cookielib模块非常强大，我们可以利用本模块的CookieJar类的对象来捕获cookie并在后续连接请求时重新发送，比如可以实现模拟登录功能。该模块主要的对象有CookieJar、FileCookieJar、MozillaCookieJar、LWPCookieJar。</p><p>它们的关系：CookieJar —-派生—-&gt;FileCookieJar  —-派生—–&gt;MozillaCookieJar和LWPCookieJar</p><p>1）获取Cookie保存到变量<br>首先，我们先利用CookieJar对象实现获取cookie的功能，存储到变量中，先来感受一下<br>13<br>import urllib2<br>import cookielib</p><p>#声明一个CookieJar对象实例来保存cookie<br>cookie = cookielib.CookieJar()</p><p>#利用urllib2库的HTTPCookieProcessor对象来创建cookie处理器<br>handler=urllib2.HTTPCookieProcessor(cookie)</p><p>#通过handler来构建opener<br>opener = urllib2.build_opener(handler)</p><p>#此处的open方法同urllib2的urlopen方法，也可以传入request<br>response = opener.open(‘<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a>‘)<br>for item in cookie:<br>    print ‘Name = ‘+item.name<br>    print ‘Value = ‘+item.value</p><p>我们使用以上方法将cookie保存到变量中，然后打印出了cookie中的值，运行结果如下<br>Name = BAIDUID<br>Value = B07B663B645729F11F659C02AAE65B4C:FG=1<br>Name = BAIDUPSID<br>Value = B07B663B645729F11F659C02AAE65B4C<br>Name = H_PS_PSSID<br>Value = 12527_11076_1438_10633<br>Name = BDSVRTM<br>Value = 0<br>Name = BD_HOME<br>Value = 0</p><p>2）保存Cookie到文件<br>在上面的方法中，我们将cookie保存到了cookie这个变量中，如果我们想将cookie保存到文件中该怎么做呢？这时，我们就要用到<br>FileCookieJar这个对象了，在这里我们使用它的子类MozillaCookieJar来实现Cookie的保存<br>import cookielib<br>import urllib2</p><p>#设置保存cookie的文件，同级目录下的cookie.txt<br>filename = ‘cookie.txt’</p><p>#声明一个MozillaCookieJar对象实例来保存cookie，之后写入文件<br>cookie = cookielib.MozillaCookieJar(filename)</p><p>#利用urllib2库的HTTPCookieProcessor对象来创建cookie处理器<br>handler = urllib2.HTTPCookieProcessor(cookie)</p><p>#通过handler来构建opener<br>opener = urllib2.build_opener(handler)</p><p>#创建一个请求，原理同urllib2的urlopen<br>response = opener.open(“<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a>“)</p><p>#保存cookie到文件<br>cookie.save(ignore_discard=True, ignore_expires=True)</p><p>关于最后save方法的两个参数在此说明一下：</p><p>官方解释如下：<br>ignore_discard: save even cookies set to be discarded.<br>ignore_expires: save even cookies that have expiredThe file is overwritten if it already exists</p><p>由此可见，ignore_discard的意思是即使cookies将被丢弃也将它保存下来，ignore_expires的意思是如果在该文件中cookies已经存在，则覆盖原文件写入，在这里，我们将这两个全部设置为True。运行之后，cookies将被保存到cookie.txt文件中，我们查看一下内容，附图如下<br>QQ截图20180116151958.jpg</p><p> 3）从文件中获取Cookie并访问<br>那么我们已经做到把Cookie保存到文件中了，如果以后想使用，可以利用下面的方法来读取cookie并访问网站，感受一下<br>import cookielib<br>import urllib2</p><p>#创建MozillaCookieJar实例对象<br>cookie = cookielib.MozillaCookieJar()</p><p>#从文件中读取cookie内容到变量<br>cookie.load(‘cookie.txt’, ignore_discard=True, ignore_expires=True)</p><p>#创建请求的request<br>req = urllib2.Request(“<a href="http://www.baidu.com" target="_blank" rel="external">http://www.baidu.com</a>“)</p><p>#利用urllib2的build_opener方法创建一个opener<br>opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))<br>response = opener.open(req)<br>print response.read()</p><p>设想，如果我们的 cookie.txt 文件中保存的是某个人登录百度的cookie，那么我们提取出这个cookie文件内容，就可以用以上方法模拟这个人的账号登录百度。</p><p> 4）利用cookie模拟网站登录<br>下面我们以我们学校的教育系统为例，利用cookie实现模拟登录，并将cookie信息保存到文本文件中，来感受一下cookie大法吧！</p><p>import urllib<br>import urllib2<br>import cookielib<br>filename = ‘cookie.txt’</p><p>#声明一个MozillaCookieJar对象实例来保存cookie，之后写入文件<br>cookie = cookielib.MozillaCookieJar(filename)<br>opener = urllib2.build_opener(urllib2.HTTPCookieProcessor(cookie))<br>postdata = urllib.urlencode({<br>‘stuid’:’201200131012’,<br>‘pwd’:’23342321’<br>})</p><p>#登录教务系统的URL<br>loginUrl = ‘<a href="http://jwxt.sdu.edu.cn:7890/pls/wwwbks/bks_login2.login" target="_blank" rel="external">http://jwxt.sdu.edu.cn:7890/pls/wwwbks/bks_login2.login</a>‘</p><p>#模拟登录，并把cookie保存到变量<br>result = opener.open(loginUrl,postdata)</p><p>#保存cookie到cookie.txt中<br>cookie.save(ignore_discard=True, ignore_expires=True)</p><p>#利用cookie请求访问另一个网址，此网址是成绩查询网址<br>gradeUrl = ‘<a href="http://jwxt.sdu.edu.cn:7890/pls/wwwbks/bkscjcx.curscopre" target="_blank" rel="external">http://jwxt.sdu.edu.cn:7890/pls/wwwbks/bkscjcx.curscopre</a>‘</p><p>#请求访问成绩查询网址<br>result = opener.open(gradeUrl)<br>print result.read()</p><p>以上程序的原理如下</p><p>创建一个带有cookie的opener，在访问登录的URL时，将登录后的cookie保存下来，然后利用这个cookie来访问其他网址。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;为什么要使用Cookie呢？&lt;br&gt;Cookie，指某些网站为了辨别用户身份、进行session跟踪而储存在用户本地终端上的数据（通常经过加密）&lt;br&gt;比如说有些网站需要登录后才能访问某个页面，在登录之前，你想抓取某个页面内容是不允许的。那么我们可以利用Urllib2库保存
+      
+    
+    </summary>
+    
+      <category term="python" scheme="bestwesternpremierbeijing.cn/categories/python/"/>
+    
+    
+      <category term="Cookie" scheme="bestwesternpremierbeijing.cn/tags/Cookie/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>通俗易懂，解读到底什么是区块链？</title>
+    <link href="bestwesternpremierbeijing.cn/16.html"/>
+    <id>bestwesternpremierbeijing.cn/16.html</id>
+    <published>2018-01-16T07:23:07.000Z</published>
+    <updated>2018-01-16T07:23:07.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>2017年9月4日，中国政府正式明令禁止ICO和数字货币交易行为，随即关闭了多个数字货币交易所。同时政府也多次声明，不会将区块链与数字货币划等号，依然非常重视区块链技术在中国的发展。随后，中国工业和信息化部成立了一个专门研究区块链的实验室——可信区块链开放实验室，进一步明确政府对区块链技术发展的重视和支持。</p><p>什么是区块链？</p><p>区块链技术源于比特币，是比特币底层支撑技术。中国政府禁止比特币交易主要是担心数字货币交易带来的金融风险，以及避免不法人士利用数字货币交易的法律漏洞设计交易骗局。但区块链是一种技术，可以让交易突破传统的信任交易模式和集中化架构，实现非安全环境下的交易安全。由于区块链技术能解决传统互联网交易过程中面临的诸多问题，近年来得到了各国政府及企业的广泛关注。目前，对于区块链技术很多网站都有详细的解释，但由于过于专业，很难让人理解，现在我们以一种通俗易懂的方式来帮助读者解读什么区块链？</p><p>通俗易懂，解读到底什么是区块链？ 放大图片</p><p>简单来说，区块链就是一个分布式账本，通过去中心化、去信任的方式集中维护一个可靠的数据库。以支付宝交易为例，传统的交易方式是买家在淘宝平台购买商品，然后将购买商品的钱打到支付宝这个中介平台，待卖方发货以及买方确认收到货之后，再由买方通知支付宝将钱打到卖方账户。但区块链技术支撑的交易模式完全不同，买家和卖家可直接进行交易，不需要通过任何中间平台做信用交易，交易后系统通过广播的形式将交易信息发布到P2P网络中，所有收到交易信息的节点或主机会在确认信息无误后记录下这笔交易。这就相当于所有的节点主机都为这边交易做了数据备份，即便某一台机器出现宕机、系统崩溃、木马攻击和数据篡改等情况也不会影响数据的记录，因为还有无数台机器作为备份。</p><p>从数据的角度讲，区块链是一种几乎不可能被更改的分布式数据库，这种分布式不仅体现在存储架构上，也体现在分布式记录，即由系统参与者共同维护。从技术的角度讲，区块链并不是单一的技术，而是多种技术的复合体，包括分布式存储、数字签名和P2P网络架构等。</p><p>区块链的工作原理</p><p>区块链的数据存储方式其实就是“区块”+“链”。这就好比我们的日记本，每一页都是一张纸，纸上可以记录有用文字信息，但每一页都会有页码，记录每页文字所处的顺序。对比来说，区块就是“纸”，用来记录创建期间发生的所有价值交换活动。页码就是“链”，按照时间先后顺序将区块存储在数据库中。</p><p>通俗易懂，解读到底什么是区块链？ 放大图片</p><p>那么或许你就要问，那么多节点到底选择有谁来优先记录区块信息？其实很简单，就是谁最先完成记录就以谁为准。如图1所示，如果老张和老李要进行一笔交易，就会产生一笔账单记录，账单记录会显示付款人信息、收款人信息、交易的内容以及当前所处的链条序列。在交易完成后，区块链系统会将本次交易清单与上一账单编号的数据进行加密之后发布到全网所有的节点，也就是接入网络中的每一台主机，所有节点在收到公告账单信息后会争夺第一记账权，这一过程包括验证交易双方的信息，在得到确认之后更新账簿，以第一个完成账单记录的节点为准。因此，一旦第一个记账完成，所有节点只能接收记账信息并更新本地账簿，这就是共识机制。</p><p>由于每笔账单交易的记录都包含上一个链条的信息，因此一旦某一条交易记录被篡改就自然会出现信息错误或上下链条信息部匹配，而且容易出现链条分叉，因此，采用区块链技术记录的数据篡改难度几乎不可能，数据的容错性极高。而且由于所有账单交易数据的公布都是以加密的方式在网络中发送，要想在网络中篡改数据就必须至少截获51%以上的节点数据并在极短的时间内破解，这种情况可以认为几乎没有可能。</p><p>区块链发展存在哪些瓶颈？</p><p>从2009年比特币出现，区块链技术的发展时间还比较短，各种层次的应用研究仍然在不断深入的过程中。但由于区块链突破的传统的集中式数据防护架构以及非信用的安全模式，其应用依旧存在着一定的安全局限，从技术层和业务层都面临诸多挑战。</p><p>首先，共识机制的挑战。区块链中的共识算法是否能实现并保障真正的安全，需要更严格的证明和时间的考验。采用的非对称加密算法可能会随着数据、密码学和计算技术的发展而变的越来越脆弱，未来可能具有一定的破解性。此外，区块链上包含账户安全的私钥是否容易窃取仍待进一步探索。</p><p>其次，51%攻击是否能突破。在比特币中，若控制节点中绝大多数计算资源，就能重改公有账本，这被称为51%攻击。真实的区块链网络是自由开放的，所以，理论上，区块链上无法阻止拥有足够多计算资源的节点做任何操作。在现实情况下，发起51%攻击是具有一定可行性的。当然，拥有足够的算力并不会迅速破坏整个体系——至少不是短时间内，但可能会导致系统混乱。</p><p>第三，N@S攻击。针对PoW共识算法容易遭受51%攻击的问题，一些研究人员对PoW共识算法进行了改进，但在解决旧有问题的同时，也引入了区块分叉时的N@S （Nothing at stake）攻击问题。比如，在某些情况下一个区块可以暂时拥有两个子区块。这种分叉状态出现时，一般是两个矿工都在短时间内发现了工作量的解答，然后将所添加的传播到临近网络中去，其他节点便慢慢形成两种版本（子区块）的区块链。区块链中规定，这种情况下的判定条件是选择工作总量最大的那条子区块。出于自身利益最大的考虑，节点上可以同时在两个分支上继续工作，以保证利益的获取。假设99%的节点用户都如此理性地考虑收益的话，即便攻击者只掌握1%的权益依旧可以决定区块链的分支走向。他可以发出交易请求，获得资产 ，然后再从另一条分支上获取添加货币到自己的钱包中。</p><p>此外，区块链也存在一些难以克服的不足：效率问题。区块链没有单一节点可信任，通过计算来换取信任。简单的一个承认交易操作，需要大量的计算参与进来。比如匿名引发的风险。区块链开发者认为匿名性在区块链交易中是重要的，并非“抗审查”。如果矿工决定不处理某笔交易在地址间的收发，那就证明交易是受矿工审查的。如果交易是匿名的，矿工就不能决定优先处理哪些交易，也就不能进行审查。但匿名性会造成非法交易的猖獗，执法部门很难溯源。</p><p>结束语</p><p>尽管存在一定的安全局限和难以克服的不足，但区块链技术提供了一个规模化的共识机制，可以作为一种更高效解决信任问题的手段，建立去中心化的可信网络。目前，区块链的应用已从单一的数字货币（如比特币）应用，延伸到经济社会的各个领域，除金融服务行业的应用相对成熟外，其他行业的应用还处于探索起步阶段，期待区块链技术的更新和完善。</p>]]></content>
+    
+    <summary type="html">
+    
+      
+      
+        &lt;p&gt;2017年9月4日，中国政府正式明令禁止ICO和数字货币交易行为，随即关闭了多个数字货币交易所。同时政府也多次声明，不会将区块链与数字货币划等号，依然非常重视区块链技术在中国的发展。随后，中国工业和信息化部成立了一个专门研究区块链的实验室——可信区块链开放实验室，进一步明确
+      
+    
+    </summary>
+    
+      <category term="知识" scheme="bestwesternpremierbeijing.cn/categories/%E7%9F%A5%E8%AF%86/"/>
+    
+    
+      <category term="区块链" scheme="bestwesternpremierbeijing.cn/tags/%E5%8C%BA%E5%9D%97%E9%93%BE/"/>
+    
+  </entry>
   
   <entry>
     <title>智能产品的自主创新之道</title>
